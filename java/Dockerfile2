@@ -1,0 +1,5 @@
+#Official JDK8 Alpine-based image
+FROM java:openjdk-8-alpine
+COPY microservicio-menu.jar /opt/microservicio-menu.jar
+EXPOSE 8085
+CMD java -jar /opt/microservicio-menu.jar

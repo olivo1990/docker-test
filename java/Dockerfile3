@@ -1,0 +1,5 @@
+#Official JDK8 Alpine-based image
+FROM java:openjdk-8-alpine
+COPY microservicio-real-time.jar /opt/microservicio-real-time.jar
+EXPOSE 8090
+CMD java -jar /opt/microservicio-real-time.jar

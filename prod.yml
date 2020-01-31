@@ -1,0 +1,50 @@
+version: '3.4'
+services:
+  javaapp:
+    image: olivo1990/microserviciologin:1.0.5
+    ports:
+      - "8080:8080"
+    deploy:
+      replicas: 1
+      restart_policy:
+        max_attempts: 3
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+    networks: 
+     - balance
+  javaapp2:
+    image: olivo1990/microserviciomenu:1.0.0
+    ports:
+      - "8085:8085"
+    deploy:
+      replicas: 1
+      restart_policy:
+        max_attempts: 3
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+    networks:
+     - balance
+  proxy:
+    image: olivo1990/loadbalancenginx:1.0.5
+    ports:
+      - 80:80
+    depends_on:
+      - javaapp
+    depends_on:
+      - javaapp2
+    links:
+      - javaapp:javaapp
+      - javaapp2:javaapp2
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks: 
+      - balance
+
+networks:
+  balance:
+    driver: overlay

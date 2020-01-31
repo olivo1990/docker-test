@@ -1,0 +1,33 @@
+version: '3.4'
+networks:
+  dbnet:
+    external:
+      name: dbnet
+
+services:
+  javaapp:
+    image: olivo1990/microserviciologin:1.0.5
+    ports:
+      - "8080:8080"
+    deploy:
+      restart_policy:
+        max_attempts: 3
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+    networks:
+     - dbnet
+  javaapp2:
+    image: olivo1990/microserviciomenu:1.0.0
+    ports:
+      - "8085:8085"
+    deploy:
+      restart_policy:
+        max_attempts: 3
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+    networks:
+     - dbnet
